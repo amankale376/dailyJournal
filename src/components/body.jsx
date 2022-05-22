@@ -3,10 +3,11 @@ import { Container, Typography ,CssBaseline } from '@material-ui/core';
 import Grids from './grid';
 import Form from './form';
 import DeleteGrid from './deleteGrid';
+import SignupForm from './Signup';
 
 function Body(props){
 function display(){
-    if(props.pageType ==="PostBlog"){
+    if(props?.pageType ==="PostBlog"){
        return <Form/> ;
     }else if(props.pageType ==="home" || props.pageType ==="about")
     {       if(props.Content.length< 1){
@@ -26,6 +27,8 @@ function display(){
             return  <DeleteGrid key={index} id={b.id} title={b.title} content={b.content} date={b.date} foundPost={true}/>;
         }) 
     }
+    }else if(props.pageType==="Signup"){
+        return <SignupForm/>
     }
 }
 return <>
