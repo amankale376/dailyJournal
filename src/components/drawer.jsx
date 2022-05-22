@@ -106,8 +106,11 @@ const useStyles = makeStyles((theme) => ({
 
 
  function DrawerRight(props) {
-
-
+//   let navigate = useNavigate(); 
+//   const routeChange = (newPath) =>{ 
+//     let path = newPath; 
+//     navigate(path);
+//   }
 // HOOKS
 const [usernameLogin,setusername] =React.useState("");
 const [passwordLogin, setPassword] =React.useState("");
@@ -130,7 +133,6 @@ React.useEffect(()=>{
 
 // LOGIN FUNCTION
   function login(event){
-
     Axios.post("http://localhost:3001/login",{
       usernameOrEmail: usernameLogin,
       password:passwordLogin
@@ -138,6 +140,7 @@ React.useEffect(()=>{
       console.log({response})
       if(response.data.success){
         Cookies.set('loggedIn',true);
+        localStorage.setItem('token', response.data.token);
         setloggedIn(true);
       }
     });
@@ -188,7 +191,7 @@ React.useEffect(()=>{
             </Button>
             </Link>
             <Divider />
-            <Link to="/deletePost">
+            <Link to="/myPosts">
             <Button className={classes.root}>
             <ListItem className={classes.listItemAfterLogin} >
             <Avatar>M</Avatar> 
@@ -205,7 +208,7 @@ React.useEffect(()=>{
         color="primary"
         className={classes.button}
         endIcon={<ExitToAppIcon/>}
-        onClick={logout}
+        onClick={logout }
         style={{marginTop:'.5rem'}}
       >
         Logout

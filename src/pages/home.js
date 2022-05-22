@@ -14,7 +14,6 @@ function Home(){
          .then((response)=>{
                 console.log({response})
                response.data.allPosts.map((e)=>{
-                    console.log({response})
                    return setPosts((prevValue)=>{
                     return [...prevValue,e];
                });

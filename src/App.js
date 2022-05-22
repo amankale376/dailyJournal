@@ -9,7 +9,7 @@ function App(){
     return <>
     <Route exact path="/" component={Home}/>
     <Route exact path="/about" component={About}/>
-    <Route exact path="/deletePost" component={DeletePost}/>
+    <Route exact path="/myPosts" component={DeletePost}/>
     <Route exact path="/post" component={PostBlog}/>
     <Route exact path="/Signup" component={Signup}/>
     </>;
