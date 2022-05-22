@@ -7,6 +7,7 @@ import Axios  from 'axios';
 function DeletePost(){
     const [posts, setPosts] = React.useState([]);
     const token = localStorage.getItem('token');
+    console.log({token});
     function getBlogs(){
          Axios.get("http://localhost:3001/getUserPosts",{headers:{'Authorization':`Bearer ${token}`}})
          .then((response)=>{
@@ -15,13 +16,12 @@ function DeletePost(){
                     return [...prevValue,e];
                });
                });
-          
-            console.log({posts, token})
          });
     }
 
     React.useEffect(()=>{
            return getBlogs();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     },[]);
    
     return <>

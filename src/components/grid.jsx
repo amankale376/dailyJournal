@@ -2,6 +2,7 @@ import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
+import { Button, TextareaAutosize } from "@material-ui/core";
 import { Avatar } from "@material-ui/core";
 import {
   Typography,
@@ -24,9 +25,9 @@ const useStyles = makeStyles((theme) => ({
 
 function Grids(props) {
   let comments = false;
-  if(props?.comments?.length > 0){
+  if (props?.comments?.length > 0) {
     comments = true;
-  } 
+  }
   const classes = useStyles();
   return (
     <>
@@ -60,57 +61,75 @@ function Grids(props) {
                 <Typography variant="h7">
                   <p style={{ padding: 16 }}>{props.content}</p>
                 </Typography>
-                
-                {
-                comments?
+                <Grid container type="row">
+                  <Grid xs={10}>
+                    <TextareaAutosize style={{ width: "100%" }}>
+                      Add a comment here !!
+                    </TextareaAutosize>
+                  </Grid>
+                  <Grid>
+                    <Button>Submit</Button>
+                  </Grid>
+                </Grid>
+
+                {comments ? (
                   <>
-                <Accordion>
-                  <AccordionSummary
-                    expandIcon={"v"}
-                    aria-controls="panel1a-content"
-                    id="panel1a-header"
-                  >
-                    <Typography>Comments</Typography>
-                  </AccordionSummary>
-                  <AccordionDetails>
-                    <Grid xs={12}>
-                      {props?.comments?.map((i) => {
-                        return (
-                          <>
-                            <Grid
-                              item
-                              container
-                              type="row"
-                              spacing={2}
-                              alignItems="center"
-                              style={{ padding: 4, marginLeft: 8 }}
-                            >
-                              <Grid p={2}>
-                                <Avatar
-                                  style={{
-                                    width: 20,
-                                    height: 20,
-                                    marginRight: 2,
-                                  }}
+                    <Accordion>
+                      <AccordionSummary
+                        expandIcon={"v"}
+                        aria-controls="panel1a-content"
+                        id="panel1a-header"
+                      >
+                        <Typography>Comments</Typography>
+                      </AccordionSummary>
+                      <AccordionDetails>
+                        <Grid xs={12}>
+                          {props?.comments?.map((i) => {
+                            return (
+                              <>
+                                <Grid
+                                  item
+                                  container
+                                  type="row"
+                                  spacing={2}
+                                  alignItems="center"
+                                  style={{ padding: 4, marginLeft: 8 }}
                                 >
-                                  H
-                                </Avatar>
-                              </Grid>
-                              <Grid p={2} item>
-                                <Typography variant="h6">{i?.commentorUsername}</Typography>
-                              </Grid>
-                            </Grid>
-                            <Grid item style={{ padding: 4, marginLeft: 50 }}>
-                              <Typography>{i?.comment}</Typography>
-                            </Grid>
-                          </>
-                        );
-                      })}
-                    </Grid>
-                  </AccordionDetails>
-                </Accordion>
-                </>
-: <></> }
+                                  <Grid p={2}>
+                                    <Avatar
+                                      style={{
+                                        width: 20,
+                                        height: 20,
+                                        marginRight: 2,
+                                      }}
+                                    >
+                                      {i?.commentorUsername
+                                        ?.charAt(0)
+                                        ?.toUpperCase()}
+                                    </Avatar>
+                                  </Grid>
+                                  <Grid p={2} item>
+                                    <Typography variant="h6">
+                                      {i?.commentorUsername}
+                                    </Typography>
+                                  </Grid>
+                                </Grid>
+                                <Grid
+                                  item
+                                  style={{ padding: 4, marginLeft: 50 }}
+                                >
+                                  <Typography>{i?.comment}</Typography>
+                                </Grid>
+                              </>
+                            );
+                          })}
+                        </Grid>
+                      </AccordionDetails>
+                    </Accordion>
+                  </>
+                ) : (
+                  <></>
+                )}
                 <Divider />
               </Paper>
             </Grid>
