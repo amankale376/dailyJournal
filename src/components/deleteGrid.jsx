@@ -29,6 +29,7 @@ rightButton:{
 
  function DeleteGrid(props) {
   console.log({props});
+  const token = localStorage.getItem('token');
   let comments = false;
   if(props?.comments?.length > 0){
     comments = true;
@@ -36,9 +37,9 @@ rightButton:{
   const classes = useStyles();
 
   const deleteBlog = (id)=>{
-    Axios.post("https://localhost:3001/deletePost",{
+    Axios.post("http://localhost:3001/deletePost",{
       postId:id
-    }).then((response)=>{
+    },{headers:{"Authrorization":`Bearer ${token}`}}).then((response)=>{
         if(response.data ==="ok"){
           window.location.reload(); 
         }
@@ -49,7 +50,7 @@ rightButton:{
     <> 
       <div className="bodyGrid">
     <div className={classes.root}>
-      <Grid container spacing={3}>
+      <Grid container>
         <Grid item xs={12}>
           <Paper className={classes.paper}>
           <Grid container justify="space-between">
@@ -81,6 +82,14 @@ rightButton:{
        <p className="grid-content">{props.content}</p>
     </Typography>
           </Grid>
+          <Grid item xs={1} className ={classes.rightButton}>
+        
+        <IconButton aria-label="delete" className={classes.margin}>
+           {props.foundPost && <DeleteIcon fontSize="large" onClick={()=>deleteBlog(props._id)} />}
+             
+         
+         </IconButton>
+               </Grid>
           {
                 comments?
                   <>
@@ -131,14 +140,7 @@ rightButton:{
                 </Accordion>
                 </>
 : <></> }
-          <Grid item xs={1} className ={classes.rightButton}>
-        
-       <IconButton aria-label="delete" className={classes.margin}>
-          {props.foundPost && <DeleteIcon fontSize="large" onClick={()=>deleteBlog(props._id)} />}
-            
-        
-        </IconButton>
-              </Grid>
+
               </Grid>
           </Paper>
         </Grid>

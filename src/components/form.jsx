@@ -49,7 +49,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
  function Grids(props) {
-
+  const token = localStorage.getItem('token');
   const classes = useStyles();
 
   const [title, setTitle] = React.useState('');
@@ -71,13 +71,12 @@ const useStyles = makeStyles((theme) => ({
     setOpen(false);
   };
   function submitPost(){
-Axios.post("localhost:3001/postBlog",{
+Axios.post("http://localhost:3001/createPost",{
   title:title,
   content:content
-  })
+  },{headers:{"Authorization":`Bearer ${token}` }})
 .then((response)=>{
-  if(response.data === "ok"){
-    
+  if(response?.data?.success === true ){
     handleClick()
   }
 })
@@ -86,7 +85,7 @@ Axios.post("localhost:3001/postBlog",{
 
   return (
     <> 
-      
+
       <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
         <Alert onClose={handleClose} severity="success">
           Blog Posted!!
