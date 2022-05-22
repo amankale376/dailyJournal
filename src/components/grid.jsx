@@ -75,11 +75,14 @@ function Grids(props) {
             <Grid item xs={12}>
               <Paper className={classes.paper}>
                 <Grid container justify="space-between">
+                  {props.date?
                   <Grid>
                     <Typography variant="h9">
                       {new Date(props.date).toLocaleString()}
                     </Typography>
                   </Grid>
+                  :<></>}
+                  {props?.user?.username?
                   <Grid>
                     {" "}
                     <Typography variant="h8">
@@ -88,6 +91,7 @@ function Grids(props) {
                       </div>
                     </Typography>{" "}
                   </Grid>
+                  :<></>}
                 </Grid>
                 <Divider />
                 <Typography variant="h4" color="primary" gutterBottom>
@@ -99,7 +103,7 @@ function Grids(props) {
                   <p style={{ padding: 16 }}>{props.content}</p>
                 </Typography>
                 <Divider />
-                {loggedUser ? (
+                {loggedUser && props?.user?.username ? (
                   <>
                     <Grid container type="row">
                       <Grid xs={10}>

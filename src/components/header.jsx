@@ -36,7 +36,7 @@ function Header(props){
     const classes = useStyles();
     return <div className={classes.root} >
     <CssBaseline />
-    <AppBar position="static" style={{background:"#5e454b", color:"#fff"}}>
+    <AppBar position="fixed" style={{background:"#5e454b", color:"#fff"}}>
     <Toolbar>
     {pathname === '/'?<>
     <Typography variant='h3' className={classes.title}>

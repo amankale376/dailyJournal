@@ -59,11 +59,14 @@ const useStyles = makeStyles((theme) => ({
             <Grid item xs={12}>
               <Paper className={classes.paper}>
                 <Grid container justify="space-between">
+                {props.date?
                   <Grid>
                     <Typography variant="h9">
                       {new Date(props.date).toLocaleString()}
                     </Typography>
                   </Grid>
+                  :<></>}
+                  {props?.user?.username?
                   <Grid>
                     {" "}
                     <Typography variant="h8">
@@ -72,6 +75,7 @@ const useStyles = makeStyles((theme) => ({
                       </div>
                     </Typography>{" "}
                   </Grid>
+                  :<></>}
                 </Grid>
                 <Grid container spacing={1}>
                   <Grid item xs={10} className={classes.grids}>

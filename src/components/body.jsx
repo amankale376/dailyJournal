@@ -26,7 +26,7 @@ function display(){
         history.push('/');
     }else if(props.pageType ==="home")
     {       if(props.Content.length< 1){
-        return  <Grids title={"No posts Found!!"} content={"please create a new Post!"}  />; 
+        return  <Grids title={"No posts Found!!"} content={"please create a new Post!"} date={null} user={null} comments={[]} />; 
     }else{
         return props.Content.map((element)=>{
             return  <Grids title={element.title} id={element._id} 
