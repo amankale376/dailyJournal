@@ -4,12 +4,12 @@ import Body from '../components/body';
 import Footer from '../components/footer';
 
 
-function Signup(){
+function Details(){
 return <>
 <Header/>
-<Body heading="Enter Your Details" pageType="Signup"/>
+<Body heading="Your Details" pageType="myDetails"/>
 <Footer />
 </>
 }
 
-export default Signup;
+export default Details;

@@ -9,6 +9,7 @@ import { Button } from '@material-ui/core';
 import Axios from 'axios';
 import Snackbar from '@material-ui/core/Snackbar';
 import Alert from '@material-ui/lab/Alert';
+import { useHistory } from 'react-router-dom/cjs/react-router-dom.min';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -49,38 +50,45 @@ const useStyles = makeStyles((theme) => ({
 }));
 
  function SignupForm(props) {
-
+  const history = useHistory();
   const classes = useStyles();
 
-  const [title, setTitle] = React.useState('');
-  const [content, setContent] = React.useState(''); 
+  const [username, setUsername] = React.useState('');
+  const [name, setName] = React.useState(''); 
+  const [email, setEmail] = React.useState(''); 
+  const [password, setPassword] = React.useState(''); 
 
   const [open, setOpen] = React.useState(false);
 
   const handleClick = () => {
-   
     setOpen(true);
   
   }; 
   const handleClose = (event, reason) => {
-    window.location.reload(); 
     if (reason === 'clickaway') {
       return  
     }
-
     setOpen(false);
+    history.push('/');
   };
-  function submitPost(){
-Axios.post("localhost:3001/postBlog",{
-  title:title,
-  content:content
+  function signupSubmit(){
+Axios.post("http://localhost:3001/signup",{
+  username,
+  email,
+  password,
+  name
   })
 .then((response)=>{
-  if(response.data === "ok"){
-    
+  if(response?.data?.success){
     handleClick()
   }
-})
+}).catch((e)=>{
+  if(e?.response?.data?.message === 'Unauthorized'){
+    alert("Please check your login credentials");
+  }else{
+  alert(e?.response?.data?.message);
+  }
+});
 
   }
 
@@ -89,7 +97,7 @@ Axios.post("localhost:3001/postBlog",{
       
       <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
         <Alert onClose={handleClose} severity="success">
-          Blog Posted!!
+          Signup Completed!
         </Alert>
       </Snackbar>
       
@@ -105,26 +113,26 @@ Axios.post("localhost:3001/postBlog",{
           <div className={classes.form} >
       
       <TextField id="" onChange={(e)=>{
-        // setTitle(e.target.value);
-      }} value={content} className={classes.formContent} label="Username" multiline="true" />
+        setUsername(e.target.value);
+      }} value={username} className={classes.formContent} label="Username" helperText= "Enter Unique username"/>
       
       <TextField id=""onChange={(e)=>{
-        // setContent(e.target.value);
-      }} value={content}  className={classes.formContent} label="name" multiline="true" />
+        setName(e.target.value);
+      }} value={name}  className={classes.formContent} label="Name" helperText="Enter name" />
       
       <TextField id=""onChange={(e)=>{
-        // setContent(e.target.value);
-      }} value={content}  className={classes.formContent} type ="email" label ="email" multiline="true" />
+        setEmail(e.target.value);
+      }} value={email}  className={classes.formContent} type ="email" label ="Email" helperText="Enter email address" />
       
-      <TextField id=""onChange={(e)=>{
-        // setContent(e.target.value);
-      }} value={content}  className={classes.formContent} type ="password" label ="password" multiline="true" />
+      <TextField  id=""onChange={(e)=>{
+        setPassword(e.target.value);
+      }} value={password}  className={classes.formContent} type ="password" label ="Password" helperText="Enter Password"/>
 
       
      </div>
      
      <Divider/>
-      <Button onClick={submitPost} variant="outlined" className={classes.formButton}  >Post</Button>
+      <Button onClick={signupSubmit} variant="outlined" className={classes.formButton}  >Signup</Button>
     </form>
     
        

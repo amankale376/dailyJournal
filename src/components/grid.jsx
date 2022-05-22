@@ -2,7 +2,10 @@ import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
-import { Button, TextareaAutosize } from "@material-ui/core";
+import {
+  Button,
+  TextField,
+} from "@material-ui/core";
 import { Avatar } from "@material-ui/core";
 import {
   Typography,
@@ -10,8 +13,9 @@ import {
   AccordionDetails,
   AccordionSummary,
 } from "@material-ui/core";
-
+import Axios from "axios";
 import Divider from "@material-ui/core/Divider";
+import jsonwebtoken from "jsonwebtoken";
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
@@ -24,13 +28,47 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function Grids(props) {
+  const token = localStorage.getItem("token");
+  let loggedUser;
+  try {
+    loggedUser = jsonwebtoken.verify(token, process.env.REACT_APP_JWT_SECRET);
+  } catch (e) {
+    loggedUser = null;
+  }
   let comments = false;
   if (props?.comments?.length > 0) {
     comments = true;
   }
   const classes = useStyles();
+  const [comment, setComment] = React.useState("");
+  function submitPost() {
+    Axios.post(
+      "http://localhost:3001/createComment",
+      {
+        post: props.id,
+        comment,
+      },
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      }
+    )
+      .then((response) => {
+        if (response?.data?.success === true) {
+          window.location.reload();
+        }
+      })
+      .catch((e) => {
+        if (e?.response?.data?.message === "Unauthorized") {
+          alert("Please check your login credentials");
+        } else {
+          alert(e?.response?.data?.message);
+        }
+      });
+  }
+
   return (
     <>
+
       <div className="bodyGrid">
         <div className={classes.root}>
           <Grid container>
@@ -51,32 +89,47 @@ function Grids(props) {
                     </Typography>{" "}
                   </Grid>
                 </Grid>
-
+                <Divider />
                 <Typography variant="h4" color="primary" gutterBottom>
                   <p style={{ color: "black" }} className="grid-heading">
                     {props.title}
                   </p>
                 </Typography>
-                <Divider />
                 <Typography variant="h7">
                   <p style={{ padding: 16 }}>{props.content}</p>
                 </Typography>
-                <Grid container type="row">
-                  <Grid xs={10}>
-                    <TextareaAutosize style={{ width: "100%" }}>
-                      Add a comment here !!
-                    </TextareaAutosize>
-                  </Grid>
-                  <Grid>
-                    <Button>Submit</Button>
-                  </Grid>
-                </Grid>
-
+                <Divider />
+                {loggedUser ? (
+                  <>
+                    <Grid container type="row">
+                      <Grid xs={10}>
+                        <TextField
+                          id="comment"
+                          label="Add a comment"
+                          type="text"
+                          autoComplete="false"
+                          helperText=""
+                          fullWidth="true"
+                          gutterbelow
+                          onChange={(e) => {
+                            setComment(e.target.value);
+                          }}
+                          value={comment}
+                        />
+                      </Grid>
+                      <Grid>
+                        <Button onClick={submitPost}>Submit</Button>
+                      </Grid>
+                    </Grid>
+                  </>
+                ) : (
+                  <></>
+                )}
                 {comments ? (
                   <>
                     <Accordion>
                       <AccordionSummary
-                        expandIcon={"v"}
+                        expandIcon={"+"}
                         aria-controls="panel1a-content"
                         id="panel1a-header"
                       >
@@ -110,7 +163,7 @@ function Grids(props) {
                                   </Grid>
                                   <Grid p={2} item>
                                     <Typography variant="h6">
-                                      {i?.commentorUsername}
+                                      @{i?.commentorUsername}
                                     </Typography>
                                   </Grid>
                                 </Grid>
@@ -120,6 +173,7 @@ function Grids(props) {
                                 >
                                   <Typography>{i?.comment}</Typography>
                                 </Grid>
+                                <Divider />
                               </>
                             );
                           })}
@@ -130,7 +184,6 @@ function Grids(props) {
                 ) : (
                   <></>
                 )}
-                <Divider />
               </Paper>
             </Grid>
           </Grid>

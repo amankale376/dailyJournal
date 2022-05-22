@@ -28,7 +28,6 @@ const useStyles = makeStyles((theme) => ({
 }));
 
  function DeleteGrid(props) {
-  console.log({props});
   const token = localStorage.getItem('token');
   let comments = false;
   if (props?.comments?.length > 0) {
@@ -43,7 +42,13 @@ const useStyles = makeStyles((theme) => ({
         if(response.data.success === true){
           window.location.reload(); 
         }
-    })
+    }).catch((e)=>{
+      if(e?.response?.data?.message === 'Unauthorized'){
+        alert("Please check your login credentials");
+      }else{
+      alert(e?.response?.data?.message);
+      }
+    });
   }
 
   return (
@@ -102,7 +107,7 @@ const useStyles = makeStyles((theme) => ({
                   <>
                     <Accordion>
                       <AccordionSummary
-                        expandIcon={"v"}
+                        expandIcon={"+"}
                         aria-controls="panel1a-content"
                         id="panel1a-header"
                       >

@@ -5,6 +5,8 @@ import DeletePost from './pages/deletePost';
 import PostBlog from './pages/post';
 import {Route} from 'react-router-dom';
 import Signup from './pages/signup';
+import Details from './pages/details';
+
 function App(){
     return <>
     <Route exact path="/" component={Home}/>
@@ -12,6 +14,7 @@ function App(){
     <Route exact path="/myPosts" component={DeletePost}/>
     <Route exact path="/post" component={PostBlog}/>
     <Route exact path="/Signup" component={Signup}/>
+    <Route exact path="/myDetails" component={Details}/>
     </>;
 
 }

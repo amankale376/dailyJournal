@@ -5,9 +5,12 @@ import Footer from '../components/footer';
 
 let blogs =[];
 const blog = {
+    user:{
+        username:'admin'
+    },
     title:"Hi! I'm Aman Your friendly neighbourhood coder.",
-    content: "This is my blog that keeps track of my Coding Knowledge.",
-    date:"13/6/2021"
+    content: "This project will help people to keep track of their knowledge safely and securely.",
+    createdAt: new Date('Sun May 22 2022').toLocaleDateString()
 }
 blogs.push(blog);
 

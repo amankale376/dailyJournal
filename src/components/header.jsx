@@ -20,6 +20,7 @@ const useStyles = makeStyles((theme) => ({
   }));
 
 function Header(props){
+  const pathname = window.location.pathname;
   const [DState, setDState] = React.useState(false);
 
   function setState(){
@@ -37,19 +38,26 @@ function Header(props){
     <CssBaseline />
     <AppBar position="static" style={{background:"#5e454b", color:"#fff"}}>
     <Toolbar>
-        
+    {pathname === '/'?<>
+    <Typography variant='h3' className={classes.title}>
+        <p className="app-bar-text-left">Daily Journal</p>
+          </Typography>
+    </>:
         <Typography variant='h3' className={classes.title}>
         <p className="app-bar-text-left"><Link to="/">Daily Journal</Link></p>
           </Typography>
+            }
           <Link to="/about">
           <IconButton>
           <InfoIcon style={{color:'white'}}/>
           </IconButton>
             </Link>
           <Link to="/">
+            {pathname === '/'?<></>:
           <IconButton>
           <HomeIcon style={{color:'white'}}/>
           </IconButton>
+            }
           </Link>
       <IconButton onClick={setState}>
       <MenuOpenRoundedIcon style={{color:'white'}} />

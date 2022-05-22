@@ -17,9 +17,9 @@ import Button from '@material-ui/core/Button';
 import SendIcon from '@material-ui/icons/Send';
 import Axios from 'axios';
 import { Typography } from '@material-ui/core';
-import Cookies from 'js-cookie';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
+import jsonwebtoken from 'jsonwebtoken';
 const drawerWidth = 300;
 
 // THEME CONTENT BELOW
@@ -106,11 +106,16 @@ const useStyles = makeStyles((theme) => ({
 
 
  function DrawerRight(props) {
-//   let navigate = useNavigate(); 
-//   const routeChange = (newPath) =>{ 
-//     let path = newPath; 
-//     navigate(path);
-//   }
+  let checkToken;
+  const token = localStorage.getItem('token');
+  try{
+      checkToken = jsonwebtoken.verify(token,process.env.REACT_APP_JWT_SECRET);
+     
+  }catch(e){
+   checkToken = null;
+  }
+  let history = useHistory(); 
+
 // HOOKS
 const [usernameLogin,setusername] =React.useState("");
 const [passwordLogin, setPassword] =React.useState("");
@@ -123,8 +128,12 @@ const [passwordLogin, setPassword] =React.useState("");
  const [loggedIn, setloggedIn] = React.useState(false);
 
 function cookieCheck(){
-  setloggedIn(Cookies.get('loggedIn'));
- 
+  if(checkToken){
+    setloggedIn(true);
+  }else{
+    setloggedIn(false);
+  }
+
 }
 
 React.useEffect(()=>{
@@ -137,19 +146,25 @@ React.useEffect(()=>{
       usernameOrEmail: usernameLogin,
       password:passwordLogin
     }).then((response)=>{
-      console.log({response})
       if(response.data.success){
-        Cookies.set('loggedIn',true);
         localStorage.setItem('token', response.data.token);
         setloggedIn(true);
+        history.push('/');
+      }
+    }).catch((e)=>{
+      if(e?.response?.data?.message === 'Unauthorized'){
+        alert("Please check your login credentials");
+      }else{
+      alert(e?.response?.data?.message);
       }
     });
   
   }
 
   function logout(){
-    Cookies.remove('loggedIn');
+    localStorage.setItem('token', null);
     setloggedIn("false");
+    history.push('/')
   }
 
   return (
@@ -165,27 +180,28 @@ React.useEffect(()=>{
           paper: classes.drawerPaper,
         }}
       >
-        <div className={classes.drawerHeader}>
-          <IconButton onClick={props.setStateFalse}>
-            {theme.direction === 'ltr' ? <ChevronRightIcon />: <ChevronLeftIcon /> }
-          </IconButton>
-        </div>
-        <Divider />
-
-
-      
         {/* LOGIN LIST START HERE */}
 
           {/* if statement start here */}
         {
-          loggedIn? 
+          loggedIn? <>
+          <div className={classes.drawerHeader}>
+          <IconButton onClick={props.setStateFalse}>
+            {theme.direction === 'ltr' ? <ChevronRightIcon />: <ChevronLeftIcon /> }
+          </IconButton>
+          <Typography variant="h6" style={{color:'gray'}} align='left'>
+            <p className={classes.marginLeftCss}>Hello, @{checkToken?checkToken.username:""}</p>
+          </Typography>
+        </div>
+        
+        <Divider />
           <List className={classes.root}>
             <Link to="/post">
             <Button className={classes.root}>
             <ListItem className={classes.listItemAfterLogin} >
-            <Avatar>C</Avatar> 
+            <Avatar>N</Avatar> 
           <Typography variant="h6" color="secondary">
-            <p className={classes.marginLeftCss}>create New post</p>
+            <p className={classes.marginLeftCss}>New post</p>
           </Typography>
             </ListItem>
             </Button>
@@ -194,9 +210,20 @@ React.useEffect(()=>{
             <Link to="/myPosts">
             <Button className={classes.root}>
             <ListItem className={classes.listItemAfterLogin} >
-            <Avatar>M</Avatar> 
+            <Avatar>P</Avatar> 
           <Typography variant="h6" color="secondary" >
             <p className={classes.marginLeftCss}>My posts</p>
+          </Typography>
+            </ListItem>
+            </Button>
+            </Link>
+            <Divider />
+            <Link to="/myDetails">
+            <Button className={classes.root}>
+            <ListItem className={classes.listItemAfterLogin} >
+            <Avatar>D</Avatar> 
+          <Typography variant="h6" color="secondary" >
+            <p className={classes.marginLeftCss}>My Details</p>
           </Typography>
             </ListItem>
             </Button>
@@ -214,7 +241,14 @@ React.useEffect(()=>{
         Logout
       </Button>
           </List>
-          :
+          </>
+          :<>
+          <div className={classes.drawerHeader}>
+          <IconButton onClick={props.setStateFalse}>
+            {theme.direction === 'ltr' ? <ChevronRightIcon />: <ChevronLeftIcon /> }
+          </IconButton>
+        </div>
+        <Divider />
         <List className={classes.root}>
 
           {/* FORM START HERE */}
@@ -254,6 +288,9 @@ React.useEffect(()=>{
         />
       </ListItem>
       <ListItem>
+       <Button><a style={{color:"grey"}} href='/signup'>Haven't Signend Up yet?</a></Button> 
+      </ListItem>
+      <ListItem>
       <Button
         variant="contained"
         color="primary"
@@ -267,6 +304,7 @@ React.useEffect(()=>{
       </form>
       {/* FORM ENDING HERE */}
     </List>
+    </>
   }
       </Drawer>
       
