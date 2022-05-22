@@ -30,7 +30,7 @@ function display(){
     }else{
         return props.Content.map((element)=>{
             return  <Grids title={element.title} id={element._id} 
-            content={element.content} date={element.createdAt} pictures={element.pictures} user={element.user} comments={element.comments} />;
+            content={element.content} date={element.createdAt} user={element.user} comments={element.comments} />;
         })
     }
        
@@ -41,7 +41,7 @@ function display(){
         }else{
         return props.Content.map((element,index)=>{
             return  <DeleteGrid key={index} _id={element._id} title={element.title} 
-            content={element.content} date={element.createdAt} pictures={element.pictures} user={element.user} comments={element.comments} foundPost={true}/>;
+            content={element.content} date={element.createdAt} user={element.user} comments={element.comments} foundPost={true}/>;
         }) 
     }}
     history.push('/');
